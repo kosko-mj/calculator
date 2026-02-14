@@ -23,16 +23,16 @@ function operate(operator, num1, num2) {
 
     if (operator === '+') {
         return add(num1, num2);
-    } else if (operator === '-') {
+    } else if (operator === '−') {  // Changed from '-' to '−'
         return subtract(num1, num2);
-    } else if (operator === 'x') {
+    } else if (operator === '×') {
         return multiply(num1, num2);
-    } else if (operator === '%') {
+    } else if (operator === '÷') {
         return divide(num1, num2);
     } else {
         return "Error";
     }
-}
+}    
 
 // Calculator State Variables
 let firstNumber = '';
@@ -100,8 +100,7 @@ equalsButton.addEventListener('click', () => {
         const result = operate(currentOperator, firstNumber, secondNumber);
 
         // Handle Division by Zero
-        if (currentOperator === '%' && secondNumber === '0') {
-            display.textContent = 'Error: Div by 0';
+        if (currentOperator === '÷' && secondNumber === '0') {            display.textContent = 'Error: Div by 0';
             firstNumber = '';
             currentOperator = null;
             shouldResetDisplay = true;
