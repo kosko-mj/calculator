@@ -92,15 +92,15 @@ operatorButtons.forEach(button => {
 const equalsButton = document.querySelector('.equals');
 
 equalsButton.addEventListener('click', () => {
-    // Get Second Number from Display
-    secondNumber = display.textContent;
-
-    // Perform Calculation If We Have Both Numbers and an Operator
-    if (firstNumber && currentOperator && secondNumber) {
+    // If we're in the middle of an operation
+    if (currentOperator && firstNumber) {
+        secondNumber = display.textContent;
+        
         const result = operate(currentOperator, firstNumber, secondNumber);
 
         // Handle Division by Zero
-        if (currentOperator === '÷' && secondNumber === '0') {            display.textContent = 'Error: Div by 0';
+        if (currentOperator === '÷' && secondNumber === '0') {
+            display.textContent = 'Error: Div by 0';
             firstNumber = '';
             currentOperator = null;
             shouldResetDisplay = true;
@@ -110,13 +110,13 @@ equalsButton.addEventListener('click', () => {
             const roundedResult = Math.round(result * 100) / 100;
             display.textContent = roundedResult;
 
-            // Store Result as First Number for Chaining Operations
+            // Store result as first number for chaining
             firstNumber = roundedResult;
             currentOperator = null;
             shouldResetDisplay = true;
         }
     }
-
+    
     console.log('First:', firstNumber, 'Second:', secondNumber, 'Op:', currentOperator);
 });
 
