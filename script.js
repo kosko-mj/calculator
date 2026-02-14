@@ -112,29 +112,31 @@ operatorButtons.forEach(button => {
 const equalsButton = document.querySelector('.equals');
 
 equalsButton.addEventListener('click', () => {
-    // If we're in the middle of an operation
-    if (currentOperator && firstNumber) {
-        secondNumber = display.textContent;
-        
-        const result = operate(currentOperator, firstNumber, secondNumber);
+    // If we don't have both numbers and an operator, do nothing
+    if (!firstNumber || !currentOperator || shouldResetDisplay) {
+        return;
+    }
+    
+    secondNumber = display.textContent;
+    
+    const result = operate(currentOperator, firstNumber, secondNumber);
 
-        // Handle Division by Zero
-        if (currentOperator === '÷' && secondNumber === '0') {
-            display.textContent = 'Error: Div by 0';
-            firstNumber = '';
-            currentOperator = null;
-            shouldResetDisplay = true;
-            clearButton.textContent = 'AC';
-        } else {
-            // Round Long Decimals
-            const roundedResult = Math.round(result * 100) / 100;
-            display.textContent = roundedResult;
+    // Handle Division by Zero
+    if (currentOperator === '÷' && secondNumber === '0') {
+        display.textContent = 'Error: Div by 0';
+        firstNumber = '';
+        currentOperator = null;
+        shouldResetDisplay = true;
+        clearButton.textContent = 'AC';
+    } else {
+        // Round Long Decimals
+        const roundedResult = Math.round(result * 100) / 100;
+        display.textContent = roundedResult;
 
-            // Store result as first number for chaining
-            firstNumber = roundedResult;
-            currentOperator = null;
-            shouldResetDisplay = true;
-        }
+        // Store result as first number for chaining
+        firstNumber = roundedResult;
+        currentOperator = null;
+        shouldResetDisplay = true;
     }
     
     console.log('First:', firstNumber, 'Second:', secondNumber, 'Op:', currentOperator);
@@ -209,5 +211,67 @@ signButton.addEventListener('click', () => {
         if (firstNumber && !currentOperator) {
             firstNumber = display.textContent;
         }
+    }
+});
+
+// Keyboard Support
+document.addEventListener('keydown', (event) => {
+    const key = event.key;
+    console.log('Key pressed:', key);
+    
+    // Numbers 0-9
+    if (key >= '0' && key <= '9') {
+        const numberButton = Array.from(document.querySelectorAll('.number'))
+            .find(btn => btn.textContent === key);
+        if (numberButton) numberButton.click();
+    }
+    
+    // Operators
+    if (key === '+') {
+        const plusButton = Array.from(document.querySelectorAll('.operator'))
+            .find(btn => btn.textContent === '+');
+        if (plusButton) plusButton.click();
+    }
+    if (key === '-') {
+        const minusButton = Array.from(document.querySelectorAll('.operator'))
+            .find(btn => btn.textContent === '−');
+        if (minusButton) minusButton.click();
+    }
+    if (key === '*') {
+        const multiplyButton = Array.from(document.querySelectorAll('.operator'))
+            .find(btn => btn.textContent === '×');
+        if (multiplyButton) multiplyButton.click();
+    }
+    if (key === '/') {
+        const divideButton = Array.from(document.querySelectorAll('.operator'))
+            .find(btn => btn.textContent === '÷');
+        if (divideButton) divideButton.click();
+    }
+    
+    // Decimal
+    if (key === '.') {
+        document.querySelector('.decimal')?.click();
+    }
+    
+    // Enter or = for equals
+    if (key === 'Enter' || key === '=') {
+        document.querySelector('.equals')?.click();
+    }
+    
+    // Backspace
+    if (key === 'Backspace') {
+        event.preventDefault(); // Prevent page back
+        document.getElementById('clear-btn')?.click();
+    }
+    
+    // Escape for AC
+    if (key === 'Escape') {
+        // Force AC behavior
+        firstNumber = '';
+        secondNumber = '';
+        currentOperator = null;
+        shouldResetDisplay = false;
+        display.textContent = '0';
+        clearButton.textContent = 'AC';
     }
 });
