@@ -119,3 +119,19 @@ equalsButton.addEventListener('click', () => {
 
     console.log('First:', firstNumber, 'Second:', secondNumber, 'Op:', currentOperator);
 });
+
+// Clear Button Functionality
+const clearButton = document.querySelector('.clear');
+
+clearButton.addEventListener('click', () => {
+    // Reset All State Variables
+    firstNumber = '';
+    secondNumber = '';
+    currentOperator = null;
+    shouldResetDisplay = false;
+
+    // Reset Display to 0
+    display.textContent = '0';
+
+    console.log('Calculator cleared');
+});
