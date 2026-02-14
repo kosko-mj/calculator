@@ -105,6 +105,7 @@ equalsButton.addEventListener('click', () => {
             firstNumber = '';
             currentOperator = null;
             shouldResetDisplay = true;
+            clearButton.textContent = 'AC';
         } else {
             // Round Long Decimals
             const roundedResult = Math.round(result * 100) / 100;
@@ -120,20 +121,45 @@ equalsButton.addEventListener('click', () => {
     console.log('First:', firstNumber, 'Second:', secondNumber, 'Op:', currentOperator);
 });
 
-// Clear Button Functionality
-const clearButton = document.querySelector('.clear');
+// AC/Backspace Button Functionality
+const clearButton = document.getElementById('clear-btn');
 
 clearButton.addEventListener('click', () => {
-    // Reset All State Variables
-    firstNumber = '';
-    secondNumber = '';
-    currentOperator = null;
-    shouldResetDisplay = false;
+    const currentDisplay = display.textContent;
+    
+    // If display is "0" or shows an error message, clear everything (AC behavior)
+    if (currentDisplay === '0' || currentDisplay.includes('Error')) {
+        firstNumber = '';
+        secondNumber = '';
+        currentOperator = null;
+        shouldResetDisplay = false;
+        display.textContent = '0';
+        clearButton.textContent = 'AC';
+    } 
+    // Otherwise delete last character (backspace behavior)
+    else {
+        if (currentDisplay.length > 1) {
+            display.textContent = currentDisplay.slice(0, -1);
+        } else {
+            display.textContent = '0';
+            clearButton.textContent = 'AC';
+        }
+    }
+});
 
-    // Reset Display to 0
-    display.textContent = '0';
+// Update button text when numbers are entered
+numberButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        if (display.textContent !== '0' && !display.textContent.includes('Error')) {
+            clearButton.textContent = '⌫';
+        }
+    });
+});
 
-    console.log('Calculator cleared');
+decimalButton.addEventListener('click', () => {
+    if (display.textContent !== '0' && !display.textContent.includes('Error')) {
+        clearButton.textContent = '⌫';
+    }
 });
 
 // Decimal Button Functionality
