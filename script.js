@@ -135,3 +135,18 @@ clearButton.addEventListener('click', () => {
 
     console.log('Calculator cleared');
 });
+
+// Decimal Button Functionality
+const decimalButton = document.querySelector('.decimal');
+
+decimalButton.addEventListener('click', () => {
+    // Dont Add Decimal if Display Already Has One
+    if (!display.textContent.includes('.')) {
+        if (shouldResetDisplay) {
+            display.textContent = '0.';
+            shouldResetDisplay = false;
+        } else {
+            display.textContent = display.textContent + '.';
+        }
+    }
+});
