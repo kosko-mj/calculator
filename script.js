@@ -76,11 +76,31 @@ operatorButtons.forEach(button => {
     button.addEventListener('click', () => {
         const operatorValue = button.textContent;
 
-        // Store the First Number and Operator
-        firstNumber = display.textContent;
-        currentOperator = operatorValue;
+        // If we already have a first number and operator, calculate first
+        if (firstNumber && currentOperator && !shouldResetDisplay) {
+            // Perform the pending operation
+            secondNumber = display.textContent;
+            const result = operate(currentOperator, firstNumber, secondNumber);
+            
+            if (currentOperator === '÷' && secondNumber === '0') {
+                display.textContent = 'Error: Div by 0';
+                firstNumber = '';
+                currentOperator = null;
+                shouldResetDisplay = true;
+                clearButton.textContent = 'AC';
+                return;
+            } else {
+                const roundedResult = Math.round(result * 100) / 100;
+                display.textContent = roundedResult;
+                firstNumber = roundedResult;
+            }
+        } else {
+            // Store the First Number
+            firstNumber = display.textContent;
+        }
 
-        // Next Number Should Start Fresh
+        // Store the Operator
+        currentOperator = operatorValue;
         shouldResetDisplay = true;
 
         console.log('First number:', firstNumber);
