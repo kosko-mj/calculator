@@ -17,20 +17,64 @@ body {
     background: #333;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     width: 100%;
-    max-width: 300px;
+    max-width: 450px;
 }
 
-.display {
+.display-container {
     background: #fff;
     padding: 20px;
-    text-align: right;
-    font-size: 2rem;
-    margin-bottom: 20px;
     border-radius: 5px;
-    min-height: 80px;
-    word-wrap: break-word;
+    margin-bottom: 20px;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.expression {
+    font-size: 1.2rem;
+    color: #666;
+    min-height: 30px;
+    text-align: right;
+    font-family: 'SF Mono', Menlo, monospace;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 5px;
+    width: 100%;
+}
+
+.expression::-webkit-scrollbar {
+    display: none;
+}
+
+.equation-display {
+    font-size: 2.5rem;
+    text-align: right;
+    font-family: monospace;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    background: transparent;
+    border: none;
+    width: 100%;
+    direction: ltr;
+    display: block;
+    min-width: 100%;
+}
+
+/* Chrome/Safari */
+.equation-display::-webkit-scrollbar {
+    display: none;
 }
 
 .buttons {
@@ -74,39 +118,17 @@ button:hover {
     background: #ff9500;
 }
 
-/* Responsive Design */
 @media (max-width: 400px) {
     .calculator {
-        width: 100%;
         padding: 15px;
     }
-
+    
     button {
         padding: 15px;
         font-size: 1rem;
     }
-
-    .display {
-        padding: 15px;
-        font-size: 1.5rem;
-        min-height: 60px;
-    }
-}
-
-@media (max-width: 300px) {
-    .buttons {
-        gap: 5px;
-    }
     
-    button {
-        padding: 10px;
-        font-size: 0.9rem;
-    }
-}
-
-/* For very tall screens, center better */
-@media (min-height: 800px) {
-    body {
-        padding: 20px;
+    .equation-display {
+        font-size: 2rem;
     }
 }

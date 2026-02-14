@@ -17,13 +17,12 @@ function divide(a, b) {
 
 // Operate Function
 function operate(operator, num1, num2) {
-    //Convert Strings to Numbers
     num1 = Number(num1);
     num2 = Number(num2);
 
     if (operator === '+') {
         return add(num1, num2);
-    } else if (operator === '−') {  // Changed from '-' to '−'
+    } else if (operator === '−') {
         return subtract(num1, num2);
     } else if (operator === '×') {
         return multiply(num1, num2);
@@ -32,201 +31,184 @@ function operate(operator, num1, num2) {
     } else {
         return "Error";
     }
-}    
+}
 
 // Calculator State Variables
 let firstNumber = '';
 let secondNumber = '';
 let currentOperator = null;
 let shouldResetDisplay = false;
+let lastEquation = '';
 
-// Get the Display Element
-const display = document.getElementById('display');
+// Get DOM Elements
+const equationDisplay = document.getElementById('equation-display');
+const expressionDisplay = document.getElementById('expression');
 
-// Function to Update Display
-function updateDisplay(value) {
-    display.textContent = value;
-}
+// Get all button elements
+const numberButtons = document.querySelectorAll('.number');
+const operatorButtons = document.querySelectorAll('.operator');
+const equalsButton = document.querySelector('.equals');
+const clearButton = document.getElementById('clear-btn');
+const decimalButton = document.querySelector('.decimal');
+const signButton = document.querySelector('.sign');
 
 // Number Button Functionality
-const numberButtons = document.querySelectorAll('.number');
-
 numberButtons.forEach(button => {
     button.addEventListener('click', () => {
         const numberValue = button.textContent;
 
         if (shouldResetDisplay) {
-            display.textContent = numberValue;
+            equationDisplay.textContent = numberValue;
             shouldResetDisplay = false;
         } else {
-            // Dont Let Display Get Too Long
-            if (display.textContent.length <12) {
-                display.textContent = display.textContent === '0'
-                ? numberValue
-                : display.textContent + numberValue;
+            if (equationDisplay.textContent === '0') {
+                equationDisplay.textContent = numberValue;
+            } else {
+                equationDisplay.textContent = equationDisplay.textContent + numberValue;
             }
         }
+        
+        // Scroll to keep the right side visible
+        equationDisplay.scrollLeft = equationDisplay.scrollWidth;
     });
 });
 
 // Operator Button Functionality
-const operatorButtons = document.querySelectorAll('.operator');
-
 operatorButtons.forEach(button => {
     button.addEventListener('click', () => {
         const operatorValue = button.textContent;
 
-        // If we already have a first number and operator, calculate first
-        if (firstNumber && currentOperator && !shouldResetDisplay) {
-            // Perform the pending operation
-            secondNumber = display.textContent;
-            const result = operate(currentOperator, firstNumber, secondNumber);
-            
-            if (currentOperator === '÷' && secondNumber === '0') {
-                display.textContent = 'Error: Div by 0';
+        firstNumber = equationDisplay.textContent;
+        equationDisplay.textContent = equationDisplay.textContent + ' ' + operatorValue + ' ';
+        
+        currentOperator = operatorValue;
+        shouldResetDisplay = false;
+        
+        // Scroll to keep the right side visible
+        equationDisplay.scrollLeft = equationDisplay.scrollWidth;
+    });
+});
+
+// Equals Button Functionality
+equalsButton.addEventListener('click', () => {
+    if (!firstNumber || !currentOperator) {
+        return;
+    }
+    
+    const equation = equationDisplay.textContent;
+    const tokens = equation.split(' ');
+    let result = parseFloat(tokens[0]);
+    
+    for (let i = 1; i < tokens.length; i += 2) {
+        const op = tokens[i];
+        const nextNum = parseFloat(tokens[i + 1]);
+        
+        if (op === '+') result = add(result, nextNum);
+        else if (op === '−') result = subtract(result, nextNum);
+        else if (op === '×') result = multiply(result, nextNum);
+        else if (op === '÷') {
+            if (nextNum === 0) {
+                equationDisplay.textContent = 'Error: Div by 0';
+                expressionDisplay.textContent = '';
                 firstNumber = '';
                 currentOperator = null;
                 shouldResetDisplay = true;
                 clearButton.textContent = 'AC';
                 return;
-            } else {
-                const roundedResult = Math.round(result * 100) / 100;
-                display.textContent = roundedResult;
-                firstNumber = roundedResult;
             }
-        } else {
-            // Store the First Number
-            firstNumber = display.textContent;
+            result = divide(result, nextNum);
         }
-
-        // Store the Operator
-        currentOperator = operatorValue;
-        shouldResetDisplay = true;
-
-        console.log('First number:', firstNumber);
-        console.log('Operator:', currentOperator);
-    });
-});
-
-// Equals Button Functionality
-const equalsButton = document.querySelector('.equals');
-
-equalsButton.addEventListener('click', () => {
-    // If we don't have both numbers and an operator, do nothing
-    if (!firstNumber || !currentOperator || shouldResetDisplay) {
-        return;
     }
     
-    secondNumber = display.textContent;
+    const roundedResult = Math.round(result * 100) / 100;
     
-    const result = operate(currentOperator, firstNumber, secondNumber);
-
-    // Handle Division by Zero
-    if (currentOperator === '÷' && secondNumber === '0') {
-        display.textContent = 'Error: Div by 0';
-        firstNumber = '';
-        currentOperator = null;
-        shouldResetDisplay = true;
-        clearButton.textContent = 'AC';
-    } else {
-        // Round Long Decimals
-        const roundedResult = Math.round(result * 100) / 100;
-        display.textContent = roundedResult;
-
-        // Store result as first number for chaining
-        firstNumber = roundedResult;
-        currentOperator = null;
-        shouldResetDisplay = true;
-    }
+    expressionDisplay.textContent = equation;
+    equationDisplay.textContent = roundedResult;
     
-    console.log('First:', firstNumber, 'Second:', secondNumber, 'Op:', currentOperator);
+    firstNumber = roundedResult;
+    currentOperator = null;
+    shouldResetDisplay = true;
+    
+    equationDisplay.scrollLeft = 0;
 });
 
 // AC/Backspace Button Functionality
-const clearButton = document.getElementById('clear-btn');
-
 clearButton.addEventListener('click', () => {
-    const currentDisplay = display.textContent;
+    const currentDisplay = equationDisplay.textContent;
     
-    // If display is "0" or shows an error message, clear everything (AC behavior)
     if (currentDisplay === '0' || currentDisplay.includes('Error')) {
         firstNumber = '';
         secondNumber = '';
         currentOperator = null;
         shouldResetDisplay = false;
-        display.textContent = '0';
+        equationDisplay.textContent = '0';
+        expressionDisplay.textContent = '';
         clearButton.textContent = 'AC';
-    } 
-    // Otherwise delete last character (backspace behavior)
-    else {
+    } else {
         if (currentDisplay.length > 1) {
-            display.textContent = currentDisplay.slice(0, -1);
+            equationDisplay.textContent = currentDisplay.slice(0, -1);
+            equationDisplay.scrollLeft = equationDisplay.scrollWidth;
         } else {
-            display.textContent = '0';
+            equationDisplay.textContent = '0';
             clearButton.textContent = 'AC';
         }
     }
 });
 
 // Decimal Button Functionality
-const decimalButton = document.querySelector('.decimal');
-
 decimalButton.addEventListener('click', () => {
-    // Dont Add Decimal if Display Already Has One
-    if (!display.textContent.includes('.')) {
+    if (!equationDisplay.textContent.includes('.')) {
         if (shouldResetDisplay) {
-            display.textContent = '0.';
+            equationDisplay.textContent = '0.';
             shouldResetDisplay = false;
         } else {
-            display.textContent = display.textContent + '.';
+            equationDisplay.textContent = equationDisplay.textContent + '.';
         }
     }
     
-    // Update clear button text
-    if (display.textContent !== '0' && !display.textContent.includes('Error')) {
+    equationDisplay.scrollLeft = equationDisplay.scrollWidth;
+    
+    if (equationDisplay.textContent !== '0' && !equationDisplay.textContent.includes('Error')) {
         clearButton.textContent = '⌫';
+    }
+});
+
+// +/- Button Functionality
+signButton.addEventListener('click', () => {
+    const currentValue = parseFloat(equationDisplay.textContent);
+    
+    if (!isNaN(currentValue)) {
+        equationDisplay.textContent = currentValue * -1;
+        
+        if (currentOperator) {
+            secondNumber = equationDisplay.textContent;
+        } else {
+            firstNumber = equationDisplay.textContent;
+        }
+        
+        equationDisplay.scrollLeft = equationDisplay.scrollWidth;
     }
 });
 
 // Update clear button text when numbers are entered
 numberButtons.forEach(button => {
     button.addEventListener('click', () => {
-        if (display.textContent !== '0' && !display.textContent.includes('Error')) {
+        if (equationDisplay.textContent !== '0' && !equationDisplay.textContent.includes('Error')) {
             clearButton.textContent = '⌫';
         }
     });
 });
 
-// +/- Button Functionality
-const signButton = document.querySelector('.sign');
-
-signButton.addEventListener('click', () => {
-    const currentValue = parseFloat(display.textContent);
-
-    if (!isNaN(currentValue)) {
-        // Toggle Positive and Negative
-        display.textContent = currentValue * -1;
-
-        // If This is the First Number Entered, Update firstNumber
-        if (firstNumber && !currentOperator) {
-            firstNumber = display.textContent;
-        }
-    }
-});
-
 // Keyboard Support
 document.addEventListener('keydown', (event) => {
     const key = event.key;
-    console.log('Key pressed:', key);
     
-    // Numbers 0-9
     if (key >= '0' && key <= '9') {
         const numberButton = Array.from(document.querySelectorAll('.number'))
             .find(btn => btn.textContent === key);
         if (numberButton) numberButton.click();
     }
     
-    // Operators
     if (key === '+') {
         const plusButton = Array.from(document.querySelectorAll('.operator'))
             .find(btn => btn.textContent === '+');
@@ -248,30 +230,27 @@ document.addEventListener('keydown', (event) => {
         if (divideButton) divideButton.click();
     }
     
-    // Decimal
     if (key === '.') {
         document.querySelector('.decimal')?.click();
     }
     
-    // Enter or = for equals
     if (key === 'Enter' || key === '=') {
+        event.preventDefault();
         document.querySelector('.equals')?.click();
     }
     
-    // Backspace
     if (key === 'Backspace') {
-        event.preventDefault(); // Prevent page back
+        event.preventDefault();
         document.getElementById('clear-btn')?.click();
     }
     
-    // Escape for AC
     if (key === 'Escape') {
-        // Force AC behavior
         firstNumber = '';
         secondNumber = '';
         currentOperator = null;
         shouldResetDisplay = false;
-        display.textContent = '0';
+        equationDisplay.textContent = '0';
+        expressionDisplay.textContent = '';
         clearButton.textContent = 'AC';
     }
 });
