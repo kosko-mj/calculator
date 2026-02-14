@@ -146,21 +146,6 @@ clearButton.addEventListener('click', () => {
     }
 });
 
-// Update button text when numbers are entered
-numberButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        if (display.textContent !== '0' && !display.textContent.includes('Error')) {
-            clearButton.textContent = '⌫';
-        }
-    });
-});
-
-decimalButton.addEventListener('click', () => {
-    if (display.textContent !== '0' && !display.textContent.includes('Error')) {
-        clearButton.textContent = '⌫';
-    }
-});
-
 // Decimal Button Functionality
 const decimalButton = document.querySelector('.decimal');
 
@@ -172,6 +157,37 @@ decimalButton.addEventListener('click', () => {
             shouldResetDisplay = false;
         } else {
             display.textContent = display.textContent + '.';
+        }
+    }
+    
+    // Update clear button text
+    if (display.textContent !== '0' && !display.textContent.includes('Error')) {
+        clearButton.textContent = '⌫';
+    }
+});
+
+// Update clear button text when numbers are entered
+numberButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        if (display.textContent !== '0' && !display.textContent.includes('Error')) {
+            clearButton.textContent = '⌫';
+        }
+    });
+});
+
+// +/- Button Functionality
+const signButton = document.querySelector('.sign');
+
+signButton.addEventListener('click', () => {
+    const currentValue = parseFloat(display.textContent);
+
+    if (!isNaN(currentValue)) {
+        // Toggle Positive and Negative
+        display.textContent = currentValue * -1;
+
+        // If This is the First Number Entered, Update firstNumber
+        if (firstNumber && !currentOperator) {
+            firstNumber = display.textContent;
         }
     }
 });
