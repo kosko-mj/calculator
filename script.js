@@ -87,3 +87,35 @@ operatorButtons.forEach(button => {
         console.log('Operator:', currentOperator);
     });
 });
+
+// Equals Button Functionality
+const equalsButton = document.querySelector('.equals');
+
+equalsButton.addEventListener('click', () => {
+    // Get Second Number from Display
+    secondNumber = display.textContent;
+
+    // Perform Calculation If We Have Both Numbers and an Operator
+    if (firstNumber && currentOperator && secondNumber) {
+        const result = operate(currentOperator, firstNumber, secondNumber);
+
+        // Handle Division by Zero
+        if (currentOperator === '%' && secondNumber === '0') {
+            display.textContent = 'Error: Div by 0';
+            firstNumber = '';
+            currentOperator = null;
+            shouldResetDisplay = true;
+        } else {
+            // Round Long Decimals
+            const roundedResult = Math.round(result * 100) / 100;
+            display.textContent = roundedResult;
+
+            // Store Result as First Number for Chaining Operations
+            firstNumber = roundedResult;
+            currentOperator = null;
+            shouldResetDisplay = true;
+        }
+    }
+
+    console.log('First:', firstNumber, 'Second:', secondNumber, 'Op:', currentOperator);
+});
