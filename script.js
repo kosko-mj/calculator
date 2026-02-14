@@ -68,3 +68,22 @@ numberButtons.forEach(button => {
         }
     });
 });
+
+// Operator Button Functionality
+const operatorButtons = document.querySelectorAll('.operator');
+
+operatorButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const operatorValue = button.textContent;
+
+        // Store the First Number and Operator
+        firstNumber = display.textContent;
+        currentOperator = operatorValue;
+
+        // Next Number Should Start Fresh
+        shouldResetDisplay = true;
+
+        console.log('First number:', firstNumber);
+        console.log('Operator:', currentOperator);
+    });
+});
