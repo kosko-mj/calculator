@@ -254,3 +254,19 @@ document.addEventListener('keydown', (event) => {
         clearButton.textContent = 'AC';
     }
 });
+
+// Theme Toggle Functionality
+const themeToggle = document.getElementById('theme-toggle');
+let darkMode = false;
+
+themeToggle.addEventListener('click', () => {
+    darkMode = !darkMode;
+    
+    if (darkMode) {
+        document.body.classList.add('dark-mode');
+        themeToggle.textContent = '☀';  // Sun to switch back to light
+    } else {
+        document.body.classList.remove('dark-mode');
+        themeToggle.textContent = '☾';  // Moon to switch to dark
+    }
+});

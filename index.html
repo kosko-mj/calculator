@@ -8,7 +8,10 @@
 </head>
 <body>
     <div class="calculator">
-        <div class="display" id="display">0</div>
+        <div class="display-container">
+            <div id="expression" class="expression"></div>
+            <div id="equation-display" class="equation-display">0</div>
+        </div>   
         <div class="buttons">
             <!-- Row 1 -->
             <button class="clear" id="clear-btn">AC</button>
@@ -35,7 +38,7 @@
             <button class="operator">+</button>
 
             <!-- Row 5 -->
-            <button class="icon">📱</button>
+            <button class="theme-toggle" id="theme-toggle">☀</button>
             <button class="number">0</button>
             <button class="decimal">.</button>
             <button class="equals">=</button>

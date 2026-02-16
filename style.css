@@ -1,134 +1,246 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: #f0f0f0;
+  font-family: 'SF Mono', Menlo, monospace;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #e8e8e8;
 }
 
 .calculator {
-    background: #333;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    width: 100%;
-    max-width: 450px;
+  background: linear-gradient(145deg, #f8f8f8, #ffffff);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 
+    0 8px 25px rgba(0,0,0,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.8);
+  width: 340px;
+  border: 1px solid #d0d0d0;
+  position: relative;
+}
+
+.calculator::before {
+  content: "CATIO";
+  position: absolute;
+  top: 12px;
+  left: 24px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #333;
+  letter-spacing: 1px;
+  z-index: 10;
 }
 
 .display-container {
-    background: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    min-height: 120px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 100%;
-    box-sizing: border-box;
-    overflow: hidden;
+  background: linear-gradient(145deg, #e5e5e5, #f5f5f5);
+  padding: 16px 12px;
+  border-radius: 8px;
+  margin: 8px 8px 16px;
+  border: 1px solid #ccc;
+  box-shadow: 
+    inset 0 2px 4px rgba(0,0,0,0.1),
+    0 2px 4px rgba(0,0,0,0.1);
+  min-height: 80px;
 }
 
 .expression {
-    font-size: 1.2rem;
-    color: #666;
-    min-height: 30px;
-    text-align: right;
-    font-family: 'SF Mono', Menlo, monospace;
-    white-space: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    padding-bottom: 5px;
-    width: 100%;
+  font-size: 1rem;
+  color: #666;
+  min-height: 24px;
+  text-align: right;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  padding-bottom: 4px;
 }
 
 .expression::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 .equation-display {
-    font-size: 2.5rem;
-    text-align: right;
-    font-family: monospace;
-    white-space: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    background: transparent;
-    border: none;
-    width: 100%;
-    direction: ltr;
-    display: block;
-    min-width: 100%;
+  font-size: 2.2rem;
+  text-align: right;
+  font-weight: 400;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  background: transparent;
+  border: none;
+  width: 100%;
+  line-height: 1.2;
 }
 
-/* Chrome/Safari */
 .equation-display::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 .buttons {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
 }
 
+/* Base button: medium gray */
 button {
-    padding: 20px;
-    font-size: 1.2rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    background: #666;
-    color: white;
+  padding: 18px 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #5a5a5a;
+  color: #fff;
+  box-shadow: 
+    0 3px 6px rgba(0,0,0,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.15);
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 button:hover {
-    background: #777;
+  background: #6a6a6a;
+  transform: translateY(-1px);
+  box-shadow: 
+    0 5px 10px rgba(0,0,0,0.3),
+    inset 0 1px 0 rgba(255,255,255,0.2);
 }
 
-.operator {
-    background: #ff9500;
+button:active {
+  transform: translateY(0);
+  box-shadow: 
+    0 2px 4px rgba(0,0,0,0.3),
+    inset 0 1px 3px rgba(0,0,0,0.2);
 }
 
-.operator:hover {
-    background: #ffaa33;
-}
-
+/* Clear: light gray */
 .clear {
-    background: #a6a6a6;
-    color: #333;
+  background: #d8d8d8;
+  color: #333;
 }
 
 .clear:hover {
-    background: #b3b3b3;
+  background: #e0e0e0;
 }
 
-.equals {
-    background: #ff9500;
+/* Operators: slightly darker gray */
+.operator {
+  background: #4a4a4a;
 }
+
+.operator:hover {
+  background: #5a5a5a;
+}
+
+/* Equals: almost black */
+.equals {
+  background: #333;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.equals:hover {
+  background: #444;
+}
+
 
 @media (max-width: 400px) {
-    .calculator {
-        padding: 15px;
-    }
-    
-    button {
-        padding: 15px;
-        font-size: 1rem;
-    }
-    
-    .equation-display {
-        font-size: 2rem;
-    }
+  .calculator {
+    padding: 16px;
+    width: 300px;
+  }
+  
+  button {
+    padding: 16px 10px;
+    font-size: 1rem;
+  }
+  
+  .equation-display {
+    font-size: 2rem;
+  }
+}
+
+/* Dark mode styles */
+body.dark-mode {
+  background: #1a1a1a;
+}
+
+body.dark-mode .calculator {
+  background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+  border-color: #333;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+}
+
+body.dark-mode .calculator::before {
+  color: #aaa;
+}
+
+body.dark-mode .display-container {
+  background: linear-gradient(145deg, #1e1e1e, #2a2a2a);
+  border-color: #444;
+}
+
+body.dark-mode .expression {
+  color: #888;
+}
+
+body.dark-mode .equation-display {
+  color: #ffaa00;  /* Warm glow color */
+  text-shadow: 
+    0 0 5px #ffaa00,
+    0 0 10px #ffaa00;  /* Glow effect */
+}
+
+body.dark-mode button {
+  background: #2a2a2a;
+  color: #ffaa00;  /* Glowing numbers */
+  text-shadow: 
+    0 0 5px #ffaa00,
+    0 0 10px #ffaa00;  /* Glow effect */
+  box-shadow: 
+    0 3px 6px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,170,0,0.2);
+}
+
+body.dark-mode button:hover {
+  background: #3a3a3a;
+  text-shadow: 
+    0 0 8px #ffaa00,
+    0 0 15px #ffaa00;  /* Brighter on hover */
+}
+
+body.dark-mode .clear {
+  background: #3a3a3a;
+  color: #ffaa00;
+}
+
+body.dark-mode .operator {
+  background: #222;
+  color: #ffaa00;
+}
+
+body.dark-mode .equals {
+  background: #111;
+  color: #ffaa00;
+  font-weight: 700;
+}
+.theme-toggle {
+  background: #5a5a5a;
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+body.dark-mode .theme-toggle {
+  background: #2a2a2a;
+  color: #ffaa00;
+  text-shadow: 0 0 5px #ffaa00;
 }
